@@ -87,22 +87,17 @@ public class Filter {
     public static List<Tweet> containing(List<Tweet> tweets, List<String> words) {
         List<Tweet> filteredTweets = new ArrayList<>();
         
-        // Store target words in a lowercase HashSet for efficient, case-insensitive O(1) lookup
-        Set<String> searchWords = new HashSet<>();
+        List<java.util.regex.Pattern> patterns = new ArrayList<>();
         for (String word : words) {
-            searchWords.add(word.toLowerCase());
+            patterns.add(java.util.regex.Pattern.compile("(?i)\\b" + java.util.regex.Pattern.quote(word) + "\\b"));
         }
         
         for (Tweet tweet : tweets) {
-            // Split the tweet's text by one or more whitespace characters
-            String[] tweetWords = tweet.getText().split("\\s+");
-            
             boolean matchFound = false;
-            for (String tweetWord : tweetWords) {
-                // Ensure we skip empty strings (e.g., if the text started with a space)
-                if (!tweetWord.isEmpty() && searchWords.contains(tweetWord.toLowerCase())) {
+            for (java.util.regex.Pattern pattern : patterns) {
+                if (pattern.matcher(tweet.getText()).find()) {
                     matchFound = true;
-                    break; // Stop checking words in this tweet once a match is found
+                    break;
                 }
             }
             

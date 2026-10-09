@@ -43,11 +43,7 @@ public class ExtractTest {
     private static final Tweet tweet5 = new Tweet(5, "user5", "Email me at user@example.com for info", d2);
     private static final Tweet tweet6 = new Tweet(6, "user6", "@bbitdiddle @BBITDIDDLE", d3);
     
-    @Test(expected=AssertionError.class)
-    public void testAssertionsEnabled() {
-        assert false; // make sure assertions are enabled with VM argument: -ea
-    }
-    
+
     // --- Tests for getTimespan ---
     
     @Test

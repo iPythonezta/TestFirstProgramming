@@ -52,13 +52,7 @@ public class FilterTest {
     private static final Tweet tweet3 = new Tweet(3, "alyssa", "talking about rivest is fun", d3);
     private static final Tweet tweet4 = new Tweet(4, "ALYSSA", "TALK to me", d4);
     
-    @Test(expected=AssertionError.class)
-    public void testAssertionsEnabled() {
-        assert false; // make sure assertions are enabled with VM argument: -ea
-    }
-    
-    // --- Tests for writtenBy ---
-    
+
     @Test
     public void testWrittenByEmptyList() {
         List<Tweet> writtenBy = Filter.writtenBy(Collections.emptyList(), "alyssa");

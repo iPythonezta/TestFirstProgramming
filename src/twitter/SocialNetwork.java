@@ -41,7 +41,22 @@ public class SocialNetwork {
      *         either authors or @-mentions in the list of tweets.
      */
     public static Map<String, Set<String>> guessFollowsGraph(List<Tweet> tweets) {
-        throw new RuntimeException("not implemented");
+        Map<String, Set<String>> followsGraph = new java.util.HashMap<>();
+        
+        for (Tweet tweet : tweets) {
+            String author = tweet.getAuthor().toLowerCase();
+            followsGraph.putIfAbsent(author, new java.util.HashSet<>());
+            
+            Set<String> mentions = Extract.getMentionedUsers(java.util.Arrays.asList(tweet));
+            for (String mention : mentions) {
+                String mentionedUser = mention.toLowerCase();
+                if (!mentionedUser.equals(author)) {
+                    followsGraph.get(author).add(mentionedUser);
+                }
+            }
+        }
+        
+        return followsGraph;
     }
 
     /**
@@ -54,7 +69,25 @@ public class SocialNetwork {
      *         descending order of follower count.
      */
     public static List<String> influencers(Map<String, Set<String>> followsGraph) {
-        throw new RuntimeException("not implemented");
+        Map<String, Integer> followerCounts = new java.util.HashMap<>();
+        
+        // Ensure all keys exist in the followerCounts map
+        for (String user : followsGraph.keySet()) {
+            followerCounts.putIfAbsent(user.toLowerCase(), 0);
+        }
+        
+        // Count followers
+        for (Map.Entry<String, Set<String>> entry : followsGraph.entrySet()) {
+            for (String followed : entry.getValue()) {
+                String followedUser = followed.toLowerCase();
+                followerCounts.put(followedUser, followerCounts.getOrDefault(followedUser, 0) + 1);
+            }
+        }
+        
+        List<String> influencers = new java.util.ArrayList<>(followerCounts.keySet());
+        influencers.sort((a, b) -> Integer.compare(followerCounts.get(b), followerCounts.get(a)));
+        
+        return influencers;
     }
 
 }
